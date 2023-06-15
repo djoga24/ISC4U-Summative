@@ -99,6 +99,80 @@ public class LibraryGUI {
         mainFrame.setVisible(true);
     }
 
+    private static void createLibraryScreen() {
+    mainFrame.getContentPane().removeAll();
+    mainFrame.setSize(400, 300);
+
+    String imagePath = "C:\\Users\\Hockeykid\\Documents\\Picture1.jpeg";
+    ImageIcon imageIcon = new ImageIcon(imagePath);
+
+    JLabel backgroundLabel = new JLabel(imageIcon);
+    backgroundLabel.setLayout(new BorderLayout());
+
+    JPanel libraryPanel = new JPanel();
+    libraryPanel.setLayout(new GridBagLayout());
+    libraryPanel.setOpaque(false);
+
+    JPanel titlePanelU = new JPanel(new GridBagLayout());
+    titlePanelU.setOpaque(false);
+
+    JLabel titleLabelU = new JLabel("User Screen");
+    titleLabelU.setFont(new Font("Arial", Font.BOLD, 24));
+    titlePanelU.add(titleLabelU);
+
+    GridBagConstraints gbc = new GridBagConstraints();
+    gbc.insets = new Insets(10, 10, 10, 10);
+
+    JButton btnViewBook = new JButton("View Books");
+
+    JButton btnReturnBook = new JButton("Return Book");
+
+    JButton btnExitU = new JButton("Exit");
+
+    gbc.gridx = 0;
+    gbc.gridy = 0;
+    libraryPanel.add(btnViewBook, gbc);
+
+    gbc.gridx = 1;
+    gbc.gridy = 0;
+    libraryPanel.add(btnReturnBook, gbc);
+
+    gbc.gridx = 2;
+    gbc.gridy = 0;
+    libraryPanel.add(btnExitU, gbc);
+
+    btnExitU.addActionListener(e -> {
+        System.exit(0);
+    });
+
+    backgroundLabel.add(libraryPanel, BorderLayout.CENTER);
+    backgroundLabel.add(titlePanelU,BorderLayout.NORTH);
+    mainFrame.setContentPane(backgroundLabel);
+    mainFrame.setVisible(true);
+
+}
+
+
+   private static boolean validateUser(String username, String password, String userType) {
+    try {
+        List<String> accounts = Files.readAllLines(Paths.get("accounts.txt"));
+        for (String account : accounts) {
+            String[] parts = account.split(",");
+            if (parts.length >= 3) {
+                String storedUsername = parts[0].trim();
+                String storedPassword = parts[1].trim();
+                String storedUserType = parts[2].trim();
+                if (storedUsername.equals(username) && storedUserType.equals(userType)) {
+                    return storedPassword.equals(password);
+                }
+            }
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+    return false;
+}
+
 
 private static void registerAccount(String username, String password, String userType) {
     try (BufferedWriter writer = new BufferedWriter(new FileWriter("accounts.txt", true))) {
@@ -122,6 +196,15 @@ private static void signIn() {
         JOptionPane.showMessageDialog(mainFrame, "Please enter username, password, and user type.");
         clearFields();
         return;
+    }
+
+    if (validateUser(username, password, userType)) {
+        if (userType.equals("User")) {
+            createLibraryScreen();
+        }
+    } else {
+        JOptionPane.showMessageDialog(mainFrame, "Invalid username, password, or user type.");
+        clearFields();
     }
 
 }

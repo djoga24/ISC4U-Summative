@@ -15,8 +15,8 @@ public class LibraryGUI {
     public static void main(String[] args) {
         createSignInScreen();
     }
-    
 
+    
     private static void createSignInScreen() {
         mainFrame = new JFrame("Library Management System");
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -49,17 +49,29 @@ public class LibraryGUI {
 
         radioUser = new JRadioButton("User");
         radioAdmin = new JRadioButton("Admin");
+        Color lightRed = new Color(255, 0, 0);
+
+        radioAdmin.setForeground(lightRed);
+
+        Color lightBlue = new Color(0,0,255);
+        radioUser.setForeground(lightBlue);
+
 
         userTypeGroup = new ButtonGroup();
         userTypeGroup.add(radioUser);
         userTypeGroup.add(radioAdmin);
         
-        JButton signInButton = new JButton("Sign In");
-        signInButton.addActionListener(e -> signIn());
+    JButton signInButton = new JButton("Sign In");
+    signInButton.addActionListener(e -> signIn());
+    signInButton.setForeground(Color.WHITE);
+    signInButton.setBackground(new Color(59, 89, 182));
+    signInButton.setFocusPainted(false); 
 
-
-        JButton registerButton = new JButton("Register");
-        registerButton.addActionListener(e -> register());
+    JButton registerButton = new JButton("Register");
+    registerButton.addActionListener(e -> register());
+    registerButton.setForeground(Color.WHITE);
+    registerButton.setBackground(new Color(59, 89, 182)); 
+    registerButton.setFocusPainted(false); 
 
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -126,9 +138,11 @@ public class LibraryGUI {
     JButton btnViewBook = new JButton("View Books");
 
     JButton btnReturnBook = new JButton("Return Book");
+   
 
     JButton btnExitU = new JButton("Exit");
-
+   
+    
     gbc.gridx = 0;
     gbc.gridy = 0;
     libraryPanel.add(btnViewBook, gbc);
@@ -141,6 +155,8 @@ public class LibraryGUI {
     gbc.gridy = 0;
     libraryPanel.add(btnExitU, gbc);
 
+    btnViewBook.addActionListener(e -> Books.viewBooks());
+
     btnExitU.addActionListener(e -> {
         System.exit(0);
     });
@@ -152,7 +168,7 @@ public class LibraryGUI {
 
 }
 
-private static void createAdminScreen() {
+    private static void createAdminScreen() {
         mainFrame.getContentPane().removeAll();
         mainFrame.setSize(400, 300);
 
@@ -183,6 +199,7 @@ private static void createAdminScreen() {
         JButton btnRemoveBooks = new JButton("Remove Book");
         JButton btnViewBooks = new JButton("View Books");
         JButton btnExitA = new JButton("Exit");
+
 
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -220,6 +237,7 @@ private static void createAdminScreen() {
         User user = new User();
 
         btnViewUsers.addActionListener(e -> user.createUsersScreen());
+
     btnAddUser.addActionListener(e -> {
         String username = JOptionPane.showInputDialog(mainFrame, "Enter username:");
         if (username == null) {
@@ -246,7 +264,6 @@ private static void createAdminScreen() {
         user.removeUser(username);
     });
 
-    
 
     btnViewBooks.addActionListener(e -> Books.viewBooks());
 
@@ -254,8 +271,6 @@ private static void createAdminScreen() {
         System.exit(0);
     });
     }
-
-
 
    private static boolean validateUser(String username, String password, String userType) {
     try {
@@ -276,7 +291,6 @@ private static void createAdminScreen() {
     }
     return false;
 }
-
 
 private static void registerAccount(String username, String password, String userType) {
     try (BufferedWriter writer = new BufferedWriter(new FileWriter("accounts.txt", true))) {
@@ -301,7 +315,7 @@ private static void signIn() {
         clearFields();
         return;
     }
- 
+
     if (validateUser(username, password, userType)) {
         if (userType.equals("User")) {
             createLibraryScreen();
@@ -312,9 +326,6 @@ private static void signIn() {
         JOptionPane.showMessageDialog(mainFrame, "Invalid username, password, or user type.");
         clearFields();
     }
-
-
-
 }
 
 private static void register() {
@@ -377,5 +388,4 @@ private static void clearFields() {
 }
 
 }
-
 

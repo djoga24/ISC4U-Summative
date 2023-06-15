@@ -16,7 +16,7 @@ public class LibraryGUI {
         createSignInScreen();
     }
     
-    
+
     private static void createSignInScreen() {
         mainFrame = new JFrame("Library Management System");
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -55,6 +55,8 @@ public class LibraryGUI {
         userTypeGroup.add(radioAdmin);
         
         JButton signInButton = new JButton("Sign In");
+        signInButton.addActionListener(e -> signIn());
+
 
         JButton registerButton = new JButton("Register");
         registerButton.addActionListener(e -> register());
@@ -111,6 +113,18 @@ private static void registerAccount(String username, String password, String use
     }
 }
 
+private static void signIn() {
+     String username = usernameField.getText();
+    String password = new String(passwordField.getPassword());
+    String userType = getUserType();
+
+    if (username.isEmpty() || password.isEmpty() || userType == null) {
+        JOptionPane.showMessageDialog(mainFrame, "Please enter username, password, and user type.");
+        clearFields();
+        return;
+    }
+
+}
 
 private static void register() {
     String username = usernameField.getText();
@@ -123,16 +137,16 @@ private static void register() {
         return;
     }
 
-    if (DoesUserExist(username)) {
+    if (DoesUserExists(username)) {
         JOptionPane.showMessageDialog(mainFrame, "Username already exists. Please choose a different username.");
         clearFields();
         return;
     }
 
     registerAccount(username, password, userType);
-}   
+}
 
-private static boolean DoesUserExist(String username) {
+private static boolean DoesUserExists(String username) {
     try {
         List<String> accounts = Files.readAllLines(Paths.get("accounts.txt"));
         for (String account : accounts) {
@@ -172,4 +186,5 @@ private static void clearFields() {
 }
 
 }
+
 

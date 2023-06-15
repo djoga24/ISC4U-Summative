@@ -246,6 +246,9 @@ private static void createAdminScreen() {
         user.removeUser(username);
     });
 
+    
+
+    btnViewBooks.addActionListener(e -> Books.viewBooks());
 
     btnExitA.addActionListener(e -> {
         System.exit(0);

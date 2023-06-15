@@ -220,6 +220,31 @@ private static void createAdminScreen() {
         User user = new User();
 
         btnViewUsers.addActionListener(e -> user.createUsersScreen());
+    btnAddUser.addActionListener(e -> {
+        String username = JOptionPane.showInputDialog(mainFrame, "Enter username:");
+        if (username == null) {
+            mainFrame.setVisible(true);
+            return;
+        }
+
+        String password = JOptionPane.showInputDialog(mainFrame, "Enter password:");
+        if (password == null) {
+            mainFrame.setVisible(true);
+            return;
+        }
+
+        user.addUser(username, password);
+    });
+
+    btnRemoveUser.addActionListener(e -> {
+        String username = JOptionPane.showInputDialog(mainFrame, "Enter username to remove:");
+        if (username == null) {
+            mainFrame.setVisible(true);
+            return;
+        }
+
+        user.removeUser(username);
+    });
 
 
     btnExitA.addActionListener(e -> {

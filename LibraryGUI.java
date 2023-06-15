@@ -152,6 +152,82 @@ public class LibraryGUI {
 
 }
 
+private static void createAdminScreen() {
+        mainFrame.getContentPane().removeAll();
+        mainFrame.setSize(400, 300);
+
+    String imagePath = "C:\\Users\\Hockeykid\\Documents\\Picture1.jpeg";
+    ImageIcon imageIcon = new ImageIcon(imagePath);
+
+    JLabel backgroundLabel = new JLabel(imageIcon);
+    backgroundLabel.setLayout(new BorderLayout());
+
+        JPanel adminPanel = new JPanel();
+        adminPanel.setLayout(new GridBagLayout());
+        adminPanel.setOpaque(false);
+
+        JPanel titlePanelA = new JPanel(new GridBagLayout());
+        titlePanelA.setOpaque(false);
+
+        JLabel titleLabelA = new JLabel("Admin Panel");
+        titleLabelA.setFont(new Font("Arial", Font.BOLD, 24));
+        titlePanelA.add(titleLabelA);
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+
+        JButton btnViewUsers = new JButton("View Users");
+        JButton btnAddUser = new JButton("Add User");
+        JButton btnRemoveUser = new JButton("Remove User");
+        JButton btnAddBooks = new JButton("Add Books");
+        JButton btnRemoveBooks = new JButton("Remove Book");
+        JButton btnViewBooks = new JButton("View Books");
+        JButton btnExitA = new JButton("Exit");
+
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        adminPanel.add(btnViewUsers, gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        adminPanel.add(btnAddUser, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        adminPanel.add(btnRemoveUser, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        adminPanel.add(btnAddBooks, gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        adminPanel.add(btnRemoveBooks, gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        adminPanel.add(btnViewBooks, gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 3;
+        adminPanel.add(btnExitA,gbc);
+
+    backgroundLabel.add(adminPanel, BorderLayout.CENTER);
+    backgroundLabel.add(titlePanelA,BorderLayout.NORTH);
+    mainFrame.setContentPane(backgroundLabel);
+    mainFrame.setVisible(true);
+
+        User user = new User();
+
+        btnViewUsers.addActionListener(e -> user.createUsersScreen());
+
+
+    btnExitA.addActionListener(e -> {
+        System.exit(0);
+    });
+    }
+
+
 
    private static boolean validateUser(String username, String password, String userType) {
     try {
@@ -197,15 +273,19 @@ private static void signIn() {
         clearFields();
         return;
     }
-
+ 
     if (validateUser(username, password, userType)) {
         if (userType.equals("User")) {
             createLibraryScreen();
+        } else if (userType.equals("Admin")) {
+            createAdminScreen();
         }
     } else {
         JOptionPane.showMessageDialog(mainFrame, "Invalid username, password, or user type.");
         clearFields();
     }
+
+
 
 }
 

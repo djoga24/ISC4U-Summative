@@ -9,6 +9,7 @@ public class User {
     private JFrame userListFrame;
     private JEditorPane usersEditorPane;
 
+    
     private static final String FILE_PATH = "accounts.txt";
 
     public void createUsersScreen() {
@@ -34,12 +35,12 @@ public class User {
         userListPanel.add(scrollPane, BorderLayout.CENTER);
 
         populateUserList();
+
         userListFrame.add(userListPanel);
         userListFrame.setVisible(true);
     }
 
     
-
 private void populateUserList() {
     try {
         List<String> lines = Files.readAllLines(Paths.get(FILE_PATH));
@@ -53,15 +54,18 @@ private void populateUserList() {
 
         StringBuilder sb = new StringBuilder();
         sb.append("<html><table>");
-        sb.append("<tr><th style='background-color:#ADD8E6; padding:5px;'>Username</th><th style='background-color:#ADD8E6; padding:5px;'>Password</th></tr>");
+        sb.append("<tr><th style='background-color:#ADD8E6; padding:5px;'>Username</th><th style='background-color:#ADD8E6; padding:5px;'>Password</th><th style='background-color:#ADD8E6; padding:5px;'>Books Owned</th></tr>");
 
         for (String line : filteredLines) {
             String[] parts = line.split(",");
             String storedUsername = parts[0];
             String storedPassword = parts[1];
+            String storedBooksOwned = (parts.length > 3) ? extractBookTitles(parts, 3) : "None";
 
             sb.append("<tr><td style='padding:5px;'>").append(storedUsername).append("</td><td style='padding:5px;'>")
-                    .append(storedPassword).append("</td><td style='padding:5px;'>");        }
+                    .append(storedPassword).append("</td><td style='padding:5px;'>")
+                    .append(storedBooksOwned).append("</td></tr>");
+        }
         sb.append("</table></html>");
 
         if (usersEditorPane != null) {
@@ -71,6 +75,18 @@ private void populateUserList() {
         e.printStackTrace();
     }
 }
+
+
+    private String extractBookTitles(String[] parts, int startIndex) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = startIndex; i < parts.length; i += 3) {
+            sb.append(parts[i].trim());
+            if (i < parts.length - 3) {
+                sb.append("<br>");
+            }
+        }
+        return sb.toString();
+    }
 
     public void addUser(String username, String password) {
         try {
@@ -145,7 +161,6 @@ private void populateUserList() {
         }
     }
 
-
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             User user = new User();
@@ -153,9 +168,5 @@ private void populateUserList() {
         });
     }
 }
-
-
-
-
 
 

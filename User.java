@@ -5,6 +5,7 @@ public class User {
     private JFrame userListFrame;
     private JEditorPane usersEditorPane;
 
+    
     public void createUsersScreen() {
         userListFrame = new JFrame("User List");
         userListFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

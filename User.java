@@ -39,7 +39,7 @@ public class User {
     }
 
     
-    
+
 private void populateUserList() {
     try {
         List<String> lines = Files.readAllLines(Paths.get(FILE_PATH));
@@ -71,6 +71,80 @@ private void populateUserList() {
         e.printStackTrace();
     }
 }
+
+    public void addUser(String username, String password) {
+        try {
+            Path filePath = Paths.get(FILE_PATH);
+            if (!Files.exists(filePath)) {
+                Files.createFile(filePath);
+            }
+
+            List<String> lines = Files.readAllLines(filePath);
+            boolean userExists = lines.stream()
+                    .map(String::trim)
+                    .anyMatch(line -> {
+                        String storedUsername = line.split(",")[0].trim();
+                        return storedUsername.equalsIgnoreCase(username);
+                    });
+
+            if (userExists) {
+                JOptionPane.showMessageDialog(userListFrame, "User already exists. Please enter a different username.");
+                return;
+            }
+
+            Files.write(filePath, (username + "," + password + ",User\n").getBytes(), StandardOpenOption.APPEND);
+            populateUserList();
+            JOptionPane.showMessageDialog(userListFrame, "User added successfully.");
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(userListFrame, "Error occurred while adding a user.");
+        }
+    }
+
+    public void removeUser(String username) {
+        try {
+            Path filePath = Paths.get(FILE_PATH);
+            if (!Files.exists(filePath)) {
+                Files.createFile(filePath);
+            }
+
+            List<String> lines = Files.readAllLines(filePath);
+            boolean removed = false;
+
+            for (int i = 0; i < lines.size(); i++) {
+                String line = lines.get(i);
+                String[] parts = line.split(",");
+
+                if (parts.length >= 1) {
+                    String storedUsername = parts[0].trim();
+                    String storedUserType = parts[2].trim();
+
+                    if (storedUsername.equalsIgnoreCase(username)) {
+                        if (storedUserType.equals("Admin")) {
+                            JOptionPane.showMessageDialog(userListFrame, "Cannot remove an Admin user.");
+                            return;
+                        }
+
+                        lines.remove(i);
+                        removed = true;
+                        break;
+                    }
+                }
+            }
+
+            if (removed) {
+                Files.write(filePath, lines);
+                populateUserList();
+                JOptionPane.showMessageDialog(userListFrame, "User removed successfully.");
+            } else {
+                JOptionPane.showMessageDialog(userListFrame, "User not found. Cannot remove the user.");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(userListFrame, "Error occurred while removing the user.");
+        }
+    }
+
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {

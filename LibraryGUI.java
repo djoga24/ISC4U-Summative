@@ -435,7 +435,6 @@ private static void register() {
     registerAccount(username, password, userType);
 }
 
-
 private static boolean DoesUserExists(String username) {
     try {
         List<String> accounts = Files.readAllLines(Paths.get("accounts.txt"));

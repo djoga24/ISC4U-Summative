@@ -1,5 +1,5 @@
 admin,admin123,Admin
-shantanu,dev,User,1984,George Orwell,328
+shantanu,dev,User
 testing1,testing2,Admin
 rafiqi,asa,User
 THELEPEHANT,zd,User
@@ -7,4 +7,4 @@ platinum123,21234,User
 imshowinglevels,12345,Admin
 rlcs2023,nrgftw,User
 carolluce47,123456,Admin
-palasoosa,w1122,User,The Hobbit,J.R.R. Tolkien,310
+palasoosa,w1122,User,The Hobbit,J.R.R. Tolkien,310,1984,George Orwell,328

@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 import java.nio.file.*;
+import java.util.*;
 import java.util.List;
 
 public class Books {
@@ -214,4 +215,149 @@ private static boolean isBookAlreadyBorrowed(String[] accountParts, String bookT
     return false;
 }
 
+
+public static void returnBook(String bookTitle) {
+    try {
+        List<String> books = Files.readAllLines(Paths.get(BOOKS_FILE_PATH));
+        List<String> accounts = Files.readAllLines(Paths.get(ACCOUNTS_FILE_PATH));
+
+        int userIndex = findUserIndex(accounts, loggedInUser);
+        if (userIndex == -1) {
+            JOptionPane.showMessageDialog(null, "User account not found.");
+            return;
+        }
+
+        boolean bookReturned = false;
+        String[] accountParts = accounts.get(userIndex).split(",");
+        String[] booksInAccount = Arrays.copyOfRange(accountParts, 3, accountParts.length);
+        List<String> updatedBooks = new ArrayList<>(books);
+        StringBuilder updatedAccount = new StringBuilder();
+
+        for (int i = 0; i < booksInAccount.length; i += 3) {
+            if (!booksInAccount[i].trim().equalsIgnoreCase(bookTitle)) {
+                updatedAccount.append(booksInAccount[i]).append(",").append(booksInAccount[i + 1]).append(",")
+                        .append(booksInAccount[i + 2]).append(",");
+            } else {
+                bookReturned = true;
+                updatedBooks.add(booksInAccount[i] + "," + booksInAccount[i + 1] + "," + booksInAccount[i + 2]);
+            }
+        }
+
+        if (!bookReturned) {
+            JOptionPane.showMessageDialog(null, "You don't have this book in your account.");
+            return;
+        }
+
+        accounts.set(userIndex, String.join(",", Arrays.copyOfRange(accountParts, 0, 3))
+                + (updatedAccount.length() > 0 ? updatedAccount.substring(0, updatedAccount.length() - 1) : ""));
+
+        Files.write(Paths.get(BOOKS_FILE_PATH), String.join("\n", updatedBooks).getBytes());
+        Files.write(Paths.get(ACCOUNTS_FILE_PATH), String.join("\n", accounts).getBytes());
+
+        JOptionPane.showMessageDialog(null, "Book returned successfully.");
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
 }
+
+public static void addBook(String title, String author, String pages) {
+    try {
+        validateBookInputs(title, author, pages);
+
+        if (isBookTitleExists(title)) {
+            throw new IllegalArgumentException("Book with the same title already exists.");
+        }
+
+        String newBookEntry = title + "," + author + "," + pages;
+
+        // Append the new book entry to the file
+        BufferedWriter writer = new BufferedWriter(new FileWriter(BOOKS_FILE_PATH, true));
+        writer.newLine(); // Add a new line before appending the new book
+        writer.write(newBookEntry);
+        writer.close();
+
+        JOptionPane.showMessageDialog(null, "Book added successfully.");
+    } catch (IOException e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null, "An error occurred while adding the book.");
+    } catch (IllegalArgumentException e) {
+        JOptionPane.showMessageDialog(null, e.getMessage());
+
+        // Reprompt user to enter book details
+        addBookPrompt();
+    }
+}
+
+private static void validateBookInputs(String title, String author, String pages) {
+    if (title.isEmpty()) {
+        throw new IllegalArgumentException("Title cannot be empty.");
+    }
+
+    if (author.isEmpty()) {
+        throw new IllegalArgumentException("Author cannot be empty.");
+    }
+
+    if (isNumeric(author)) {
+        throw new IllegalArgumentException("Author cannot be a number.");
+    }
+
+    if (pages.isEmpty()) {
+        throw new IllegalArgumentException("Number of pages cannot be empty.");
+    }
+
+    int numPages;
+    try {
+        numPages = Integer.parseInt(pages);
+        if (numPages <= 0) {
+            throw new IllegalArgumentException("Number of pages must be a positive integer.");
+        }
+    } catch (NumberFormatException e) {
+        throw new IllegalArgumentException("Number of pages must be a valid integer.");
+    }
+}
+
+private static boolean isBookTitleExists(String title) throws IOException {
+    List<String> books = Files.readAllLines(Paths.get(BOOKS_FILE_PATH));
+    for (String book : books) {
+        String[] parts = book.split(",");
+        String existingTitle = parts[0].trim();
+        if (existingTitle.equalsIgnoreCase(title)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+private static boolean isNumeric(String str) {
+    return str.matches("-?\\d+(\\.\\d+)?");
+}
+
+
+private static void addBookPrompt() {
+    String title = JOptionPane.showInputDialog(null, "Enter the book title:");
+    String author = JOptionPane.showInputDialog(null, "Enter the book author:");
+    String pages = JOptionPane.showInputDialog(null, "Enter the number of pages:");
+
+    addBook(title, author, pages);
+}
+
+public static void removeBook(String bookTitle) {
+    try {
+        List<String> books = Files.readAllLines(Paths.get(BOOKS_FILE_PATH));
+
+        int bookIndex = findBookIndex(books, bookTitle);
+        if (bookIndex != -1) {
+            books.remove(bookIndex);
+            Files.write(Paths.get(BOOKS_FILE_PATH), books);
+            JOptionPane.showMessageDialog(null, "Book removed successfully.");
+        } else {
+            JOptionPane.showMessageDialog(null, "Book not found. Cannot remove the book.");
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
+
+}
+
+

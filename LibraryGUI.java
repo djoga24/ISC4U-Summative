@@ -85,7 +85,6 @@ public class LibraryGUI {
         gbc.gridy = 1;
         signInPanel.add(passwordLabel, gbc);
 
-        
         gbc.gridx = 1;
         gbc.gridy = 1;
         signInPanel.add(passwordField, gbc);
@@ -137,11 +136,32 @@ public class LibraryGUI {
     gbc.insets = new Insets(10, 10, 10, 10);
 
     JButton btnViewBook = new JButton("View Books");
-    
+    btnViewBook.setBackground(new Color(255, 165, 0)); // Orange background
+    btnViewBook.setForeground(Color.BLACK);
+    btnViewBook.setFocusPainted(false); // Remove the focus border
+
     JButton btnReturnBook = new JButton("Return Book");
-   
+    btnReturnBook.setBackground(new Color(144, 238, 144)); 
+    btnReturnBook.setForeground(Color.BLACK);
+    btnReturnBook.setFocusPainted(false);
+
     JButton btnExitU = new JButton("Exit");
-   
+    btnExitU.setBackground(new Color(220, 20, 60)); // Crimson background
+    btnExitU.setForeground(Color.WHITE);
+    btnExitU.setFocusPainted(false);
+
+    // Customize the font for the buttons
+    Font buttonFont = new Font("Arial", Font.BOLD, 14);
+    btnViewBook.setFont(buttonFont);
+    btnReturnBook.setFont(buttonFont);
+    btnExitU.setFont(buttonFont);
+
+    // Customize the button size
+    Dimension buttonSize = new Dimension(120, 40);
+    btnViewBook.setPreferredSize(buttonSize);
+    btnReturnBook.setPreferredSize(buttonSize);
+    btnExitU.setPreferredSize(buttonSize);
+
     gbc.gridx = 0;
     gbc.gridy = 0;
     libraryPanel.add(btnViewBook, gbc);
@@ -205,6 +225,37 @@ public class LibraryGUI {
         JButton btnRemoveBooks = new JButton("Remove Book");
         JButton btnViewBooks = new JButton("View Books");
         JButton btnExitA = new JButton("Exit");
+
+        btnViewUsers.setBackground(new Color(255, 165, 0)); // Orange background
+        btnViewUsers.setForeground(Color.BLACK); // White text
+
+        btnAddUser.setBackground(new Color(176, 196, 222)); // Light steel blue background
+        btnAddUser.setForeground(Color.BLACK); // Black text
+
+        btnRemoveUser.setBackground(new Color(218, 112, 214)); // Orchid background
+        btnRemoveUser.setForeground(Color.BLACK); // White text
+
+        btnAddBooks.setBackground(new Color(60, 179, 113)); // Medium sea green background
+        btnAddBooks.setForeground(Color.WHITE); // White text
+
+        btnRemoveBooks.setBackground(new Color(255, 0, 0)); // Red background
+        btnRemoveBooks.setForeground(Color.WHITE); // White text
+
+        btnViewBooks.setBackground(new Color(70, 130, 180)); // Steel blue background
+        btnViewBooks.setForeground(Color.WHITE); // White text
+
+        btnExitA.setBackground(new Color(176, 196, 222)); // Light steel blue background
+        btnExitA.setForeground(new Color(255, 0, 0)); // Red text
+
+// Set a different font for the buttons
+    Font buttonFont = new Font("Times New Roman", Font.BOLD, 14);
+    btnViewUsers.setFont(buttonFont);
+    btnAddUser.setFont(buttonFont);
+    btnRemoveUser.setFont(buttonFont);
+    btnAddBooks.setFont(buttonFont);
+    btnRemoveBooks.setFont(buttonFont);
+    btnViewBooks.setFont(buttonFont);
+    btnExitA.setFont(buttonFont);
 
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -383,6 +434,7 @@ private static void register() {
 
     registerAccount(username, password, userType);
 }
+
 
 private static boolean DoesUserExists(String username) {
     try {

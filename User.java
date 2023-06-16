@@ -9,7 +9,7 @@ public class User {
     private JFrame userListFrame;
     private JEditorPane usersEditorPane;
 
-    
+
     private static final String FILE_PATH = "accounts.txt";
 
     public void createUsersScreen() {
@@ -19,7 +19,7 @@ public class User {
         userListFrame.setLocationRelativeTo(null);
 
         JPanel userListPanel = new JPanel(new BorderLayout());
-        userListPanel.setBackground(new Color(240, 240, 240));
+        userListPanel.setBackground(new Color(240, 240, 241));
 
         JLabel headingLabel = new JLabel("User List");
         headingLabel.setFont(new Font("Arial", Font.BOLD, 20));

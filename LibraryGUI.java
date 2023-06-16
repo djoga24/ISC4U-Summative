@@ -85,6 +85,7 @@ public class LibraryGUI {
         gbc.gridy = 1;
         signInPanel.add(passwordLabel, gbc);
 
+        
         gbc.gridx = 1;
         gbc.gridy = 1;
         signInPanel.add(passwordField, gbc);
@@ -136,13 +137,11 @@ public class LibraryGUI {
     gbc.insets = new Insets(10, 10, 10, 10);
 
     JButton btnViewBook = new JButton("View Books");
-
+    
     JButton btnReturnBook = new JButton("Return Book");
    
-
     JButton btnExitU = new JButton("Exit");
    
-    
     gbc.gridx = 0;
     gbc.gridy = 0;
     libraryPanel.add(btnViewBook, gbc);
@@ -156,6 +155,13 @@ public class LibraryGUI {
     libraryPanel.add(btnExitU, gbc);
 
     btnViewBook.addActionListener(e -> Books.viewBooks());
+
+    btnReturnBook.addActionListener(e -> {
+        String bookToReturn = JOptionPane.showInputDialog(mainFrame, "Enter the book you want to return:");
+        if (bookToReturn != null && !bookToReturn.isEmpty()) {
+            Books.returnBook(bookToReturn);
+        }
+    });
 
     btnExitU.addActionListener(e -> {
         System.exit(0);
@@ -199,7 +205,6 @@ public class LibraryGUI {
         JButton btnRemoveBooks = new JButton("Remove Book");
         JButton btnViewBooks = new JButton("View Books");
         JButton btnExitA = new JButton("Exit");
-
 
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -264,6 +269,37 @@ public class LibraryGUI {
         user.removeUser(username);
     });
 
+    btnAddBooks.addActionListener(e -> {
+        String title = JOptionPane.showInputDialog(mainFrame, "Enter the book title:");
+        if (title == null) {
+            mainFrame.setVisible(true);
+            return;
+        }
+
+        String author = JOptionPane.showInputDialog(mainFrame, "Enter the book author:");
+        if (author == null) {
+            mainFrame.setVisible(true);
+            return;
+        }
+
+        String pages = JOptionPane.showInputDialog(mainFrame, "Enter the number of pages:");
+        if (pages == null) {
+            mainFrame.setVisible(true);
+            return;
+        }
+
+        Books.addBook(title, author, pages);
+    });
+
+    btnRemoveBooks.addActionListener(e -> {
+        String title = JOptionPane.showInputDialog(mainFrame, "Enter the book title:");
+        if (title == null) {
+            mainFrame.setVisible(true);
+            return;
+        }
+
+        Books.removeBook(title);
+    });
 
     btnViewBooks.addActionListener(e -> Books.viewBooks());
 
